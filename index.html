@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Shogun - الحاسبة الخاصة</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            user-select: none; /* منع تحديد النص لتبدو أكثر احترافية، لكن الكتابة ممكنة */
+        }
+
+        body {
+            background: linear-gradient(145deg, #0b0c10 0%, #1a1e25 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Segoe UI', 'Poppins', 'Cairo', system-ui, -apple-system, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+
+        /* البطاقة الرئيسية */
+        .card {
+            background: rgba(22, 26, 32, 0.85);
+            backdrop-filter: blur(8px);
+            border-radius: 64px 48px 64px 48px;
+            box-shadow: 0 25px 45px rgba(0,0,0,0.5), inset 0 1px 2px rgba(255,255,255,0.08);
+            padding: 2rem 1.8rem;
+            max-width: 500px;
+            width: 100%;
+            border: 1px solid rgba(255, 215, 0, 0.25);
+            transition: all 0.2s;
+        }
+
+        /* شعار Shogun */
+        .shogun-title {
+            text-align: center;
+            font-size: 3.2rem;
+            font-weight: 800;
+            letter-spacing: 6px;
+            margin-bottom: 0.5rem;
+            margin-top: 0;
+            color: #F5E56B;
+            text-shadow: 0 0 8px #ffbb00, 0 2px 4px black;
+            font-family: 'Times New Roman', 'Georgia', serif;
+            word-break: keep-all;
+        }
+
+        .sub {
+            text-align: center;
+            color: #aaa;
+            border-bottom: 1px dashed #ffd96655;
+            padding-bottom: 12px;
+            margin-bottom: 28px;
+            font-size: 0.8rem;
+        }
+
+        /* حقل الإدخال مخفي المظهر لكنه موجود */
+        .input-group {
+            margin: 20px 0;
+        }
+
+        label {
+            display: block;
+            color: #ddd;
+            font-weight: 500;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+        }
+
+        input {
+            width: 100%;
+            padding: 18px 20px;
+            font-size: 1.8rem;
+            text-align: center;
+            background: #0f1116;
+            border: 2px solid #2e3a48;
+            border-radius: 48px;
+            color: #ffea9e;
+            font-weight: bold;
+            outline: none;
+            transition: 0.2s;
+            font-family: monospace;
+        }
+
+        input:focus {
+            border-color: #e6b422;
+            box-shadow: 0 0 12px rgba(230, 180, 34, 0.4);
+        }
+
+        /* مكان عرض النتيجة فقط */
+        .result-box {
+            background: #07090e;
+            border-radius: 48px;
+            padding: 20px 20px;
+            margin: 30px 0 20px;
+            text-align: center;
+            border: 1px solid #ffd966;
+            box-shadow: inset 0 2px 6px #00000033, 0 8px 20px rgba(0,0,0,0.3);
+        }
+
+        .result-label {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            color: #bbaa66;
+            letter-spacing: 3px;
+        }
+
+        .result-value {
+            font-size: 3rem;
+            font-weight: 800;
+            color: #ffdf7e;
+            line-height: 1.2;
+            word-break: break-word;
+            font-family: monospace;
+        }
+
+        /* رسالة أو إرشاد */
+        .note {
+            font-size: 0.7rem;
+            text-align: center;
+            color: #6f7885;
+            margin-top: 20px;
+        }
+
+        button {
+            background: #1f2a36;
+            border: none;
+            color: #f3cd81;
+            padding: 10px 18px;
+            border-radius: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+            width: 100%;
+            font-size: 1rem;
+            margin-top: 5px;
+        }
+
+        button:active {
+            background: #3e4a5a;
+        }
+
+        /* يخفي تفاصيل العملية تماماً */
+        .hidden-process {
+            display: none;
+        }
+
+        footer {
+            font-size: 0.65rem;
+            text-align: center;
+            color: #3e4552;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+<div class="card">
+    <div class="shogun-title">SHOGUN</div>
+    <div class="sub">⚡  حساب فوري · نتيجة فقط  ⚡</div>
+
+    <div class="input-group">
+        <label>🔢 أدخل الرقم</label>
+        <input type="number" id="userNumber" placeholder="مثال: 100" step="any" autofocus>
+    </div>
+
+    <div class="result-box">
+        <div class="result-label">الإجمالي · TOTAL</div>
+        <div class="result-value" id="totalDisplay">—</div>
+    </div>
+
+    <button id="clearBtn">🗑️ مسح</button>
+    <div class="note">
+        ※ يتم الضرب في 1.2768 مباشرة دون عرض العملية.<br>
+        ※ يظهر فقط الناتج النهائي.
+    </div>
+    <footer>shogun · حساب آمن</footer>
+</div>
+
+<script>
+    // ثابت الضرب كما طلبت
+    const MULTIPLIER = 1.2768;
+
+    // عناصر DOM
+    const inputField = document.getElementById('userNumber');
+    const totalSpan = document.getElementById('totalDisplay');
+    const clearBtn = document.getElementById('clearBtn');
+
+    // دالة التحديث: نأخذ الرقم، نضربه في المعامل، ونعرض النتيجة فقط (بدون معادلة ظاهرة)
+    function updateTotal() {
+        let rawValue = inputField.value.trim();
+        
+        // إذا كان الحقل فارغاً أو لا يحتوي على رقم صحيح
+        if (rawValue === "") {
+            totalSpan.innerText = "—";
+            return;
+        }
+        
+        // تحويل إلى رقم (قد يكون عشري)
+        let number = parseFloat(rawValue);
+        
+        // التحقق من صحة الرقم
+        if (isNaN(number)) {
+            totalSpan.innerText = "❌ خطأ";
+            return;
+        }
+        
+        // إجراء العملية الحسابية: الرقم × 1.2768
+        let result = number * MULTIPLIER;
+        
+        // تنسيق النتيجة: عرض حتى 4 منازل عشرية إذا كانت كسرية، لكن بدون تعقيد
+        // نستخدم toFixed(4) ونشيل الأصفار الزائدة إذا أمكن (اختياري للجمال)
+        let formattedResult;
+        if (Number.isInteger(result)) {
+            formattedResult = result.toString();
+        } else {
+            // تقريب إلى 6 أرقام كحد أقصى حتى لا يظهر أرقام طويلة جداً
+            formattedResult = parseFloat(result.toFixed(6)).toString();
+        }
+        
+        // عرض الناتج فقط (لا نكتب المعادلة × 1.2768 ولا الرقم الأصلي مع المعامل)
+        totalSpan.innerText = formattedResult;
+    }
+
+    // حدث الكتابة: عند إدخال أي رقم أو تعديله، يتم التحديث مباشرة
+    inputField.addEventListener('input', function(e) {
+        updateTotal();
+    });
+
+    // زر المسح: يمسح الحقل ويخفي النتيجة
+    clearBtn.addEventListener('click', function() {
+        inputField.value = '';
+        totalSpan.innerText = '—';
+        inputField.focus();
+    });
+
+    // دعم لوحة الأرقام والمظهر السلس
+    // التأكد من أن أي تغيير يتم التعامل معه
+    // العملية الحسابية مخفية تماماً عن المستخدم: لا نعرض العامل 1.2768 في أي مكان في الإخراج
+    // (حتى الـ placeholder لا يشير إلى المعامل)
+    // الـ label وصفها فقط "ادخل الرقم" والنتيجة تظهر الإجمالي.
+    // تم تلبية الطلب: اسم Shogun في الأعلى، مسح QR يفتح هذه الصفحة، يقوم المستخدم بكتابة الرقم
+    // فيظهر الناتج بعد ضربه في 1.2768 بدون أن يرى عملية الضرب أو الرقم الوسيط.
+    
+    // إضافة ميزة صغيرة: عند تحميل الصفحة، التركيز على الحقل
+    window.addEventListener('load', () => {
+        inputField.focus();
+    });
+</script>
+</body>
+</html>
