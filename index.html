@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Shogun - الحاسبة الخاصة</title>
+    <title>Shogun </title>
     <style>
         * {
             box-sizing: border-box;
@@ -20,8 +20,6 @@
             margin: 0;
             padding: 20px;
         }
-
-        /* البطاقة الرئيسية */
         .card {
             background: rgba(22, 26, 32, 0.85);
             backdrop-filter: blur(8px);
@@ -34,7 +32,6 @@
             transition: all 0.2s;
         }
 
-        /* شعار Shogun */
         .shogun-title {
             text-align: center;
             font-size: 3.2rem;
@@ -57,7 +54,7 @@
             font-size: 0.8rem;
         }
 
-        /* حقل الإدخال مخفي المظهر لكنه موجود */
+        
         .input-group {
             margin: 20px 0;
         }
@@ -91,7 +88,7 @@
             box-shadow: 0 0 12px rgba(230, 180, 34, 0.4);
         }
 
-        /* مكان عرض النتيجة فقط */
+        
         .result-box {
             background: #07090e;
             border-radius: 48px;
@@ -118,7 +115,7 @@
             font-family: monospace;
         }
 
-        /* رسالة أو إرشاد */
+       
         .note {
             font-size: 0.7rem;
             text-align: center;
@@ -144,7 +141,7 @@
             background: #3e4a5a;
         }
 
-        /* يخفي تفاصيل العملية تماماً */
+       
         .hidden-process {
             display: none;
         }
@@ -163,20 +160,20 @@
     <div class="sub">⚡  حساب فوري · نتيجة فقط  ⚡</div>
 
     <div class="input-group">
-        <label>🔢 أدخل الرقم</label>
+        <label>Amount</label>
         <input type="number" id="userNumber" placeholder="مثال: 100" step="any" autofocus>
     </div>
 
     <div class="result-box">
-        <div class="result-label">الإجمالي · TOTAL</div>
+        <div class="result-label">TOTAL</div>
         <div class="result-value" id="totalDisplay">—</div>
     </div>
 
-    <button id="clearBtn">🗑️ مسح</button>
-    <div class="note">
+    <button id="clearBtn">Delete</button>
+    <!-- <div class="note">
         ※ يتم الضرب في 1.2768 مباشرة دون عرض العملية.<br>
         ※ يظهر فقط الناتج النهائي.
-    </div>
+    </div> -->
     <footer>shogun · حساب آمن</footer>
 </div>
 
