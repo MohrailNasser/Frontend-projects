@@ -157,11 +157,11 @@
 <body>
 <div class="card">
     <div class="shogun-title">SHOGUN</div>
-    <div class="sub">⚡  حساب فوري · نتيجة فقط  ⚡</div>
+    <!-- <div class="sub">⚡  حساب فوري · نتيجة فقط  ⚡</div> -->
 
     <div class="input-group">
         <label>Amount</label>
-        <input type="number" id="userNumber" placeholder="مثال: 100" step="any" autofocus>
+        <input type="number" id="userNumber" placeholder="100" step="any" autofocus>
     </div>
 
     <div class="result-box">
@@ -174,7 +174,7 @@
         ※ يتم الضرب في 1.2768 مباشرة دون عرض العملية.<br>
         ※ يظهر فقط الناتج النهائي.
     </div> -->
-    <footer>shogun · حساب آمن</footer>
+    <footer>shogun · Secure account</footer>
 </div>
 
 <script>
@@ -201,7 +201,7 @@
         
         // التحقق من صحة الرقم
         if (isNaN(number)) {
-            totalSpan.innerText = "❌ خطأ";
+            totalSpan.innerText = "Wrong";
             return;
         }
         
